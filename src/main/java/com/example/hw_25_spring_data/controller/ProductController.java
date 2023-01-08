@@ -1,48 +1,51 @@
 package com.example.hw_25_spring_data.controller;
 
 import com.example.hw_25_spring_data.dto.ProductDto;
-import com.example.hw_25_spring_data.entities.Product;
-import com.example.hw_25_spring_data.service.ProductService;
-import lombok.AllArgsConstructor;
+import com.example.hw_25_spring_data.model.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.StringJoiner;
+
+import static com.example.hw_25_spring_data.controller.OrderController.EXC_MSG;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class Controller {
+public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping(value = "/getAllProducts")
-    public List<ProductDto> readAllOrders() {
-        List<ProductDto> allProducts = productService.getAllProducts();
-        allProducts.forEach(productDto -> log.info(productDto.toString()));
-        return allProducts;
+    @PutMapping(value = "/addProducts")
+    public String writeProducts(@RequestParam Integer qty) {
+        if (qty == null || qty == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity must be greater than zero");
+        } else {
+            return productService.addProducts(qty);
+        }
     }
 
-    @GetMapping(value = "/getProduct/{id}")
-    public ProductDto readOrder(@PathVariable Integer id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Argument {id} is null");
-        } else {
-            ProductDto productDto = null;
-            String logMsg;
-            try {
-                productDto = productService.getProductById(id);
-                logMsg = productDto.toString();
-            } catch (NoSuchElementException e) {
-                logMsg = e.getMessage();
-            }
-            log.info("{}", logMsg);
-            return productDto;
+    @GetMapping(value = "/getAllProducts")
+    public List<ProductDto> readAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    @GetMapping(value = "/getProduct")
+    public ProductDto readProduct(@RequestParam int id) {
+        try {
+            return productService.getProductById(id);
+        } catch (NoSuchElementException e) {
+            log.info("{}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
+    }
+
+    @DeleteMapping(value = "/delAllProducts")
+    public String removeAllProducts() {
+        return productService.removeAllProducts();
     }
 }

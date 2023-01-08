@@ -1,13 +1,12 @@
 package com.example.hw_25_spring_data.controller;
 
-import com.example.hw_25_spring_data.dto.ProductDto;
-import com.example.hw_25_spring_data.service.ProductService;
+import com.example.hw_25_spring_data.dto.OrderDto;
+import com.example.hw_25_spring_data.model.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,42 +14,58 @@ import java.util.NoSuchElementException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class ProductController {
+public class OrderController {
 
-    private final ProductService productService;
+    private final OrderService orderService;
+    protected static final String EXC_MSG = "ID NOT FOUND";
 
-    @GetMapping(value = "/getAllProducts")
-    public List<ProductDto> readAllProducts() {
-        List<ProductDto> allProducts = productService.getAllProducts();
-        allProducts.forEach(productDto -> log.info(productDto.toString()));
-        return allProducts;
-    }
-
-    @GetMapping(value = "/getProduct/{id}")
-    public ProductDto readProduct(@PathVariable Integer id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Argument {id} is null");
-        } else {
-            ProductDto productDto = null;
-            String logMsg;
-            try {
-                productDto = productService.getProductById(id);
-                logMsg = productDto.toString();
-            } catch (NoSuchElementException e) {
-                logMsg = e.getMessage();
-            }
-            log.info("{}", logMsg);
-            return productDto;
+    @PutMapping(value = "/addOrder")
+    public String writeOrder(@RequestParam int... id) {
+        try {
+            return orderService.addOrder(id);
+        } catch (NoSuchElementException e) {
+            log.info("{}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }
 
-    @PutMapping(value = "/addProducts/{qty}")
-    public void writeProducts(@PathVariable Integer qty) {
-        if (qty == null || qty == 0) {
-            throw new IllegalArgumentException("Argument {qty} is null");
-        } else {
-            productService.addProducts(qty);
+    @GetMapping(value = "/getOrder")
+    public OrderDto readOrder(@RequestParam int id) {
+        try {
+            return orderService.getOrderById(id);
+        } catch (NoSuchElementException e) {
+            log.info("{}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }
 
+    @GetMapping(value = "/getAllOrders")
+    public List<OrderDto> readAllOrders() {
+        return orderService.getAllOrders();
+    }
+
+    @DeleteMapping(value = "/delOrder")
+    public String removeOrder(@RequestParam int id) {
+        try {
+            return orderService.removeOrder(id);
+        } catch (NoSuchElementException e) {
+            log.info("{}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
+        }
+    }
+
+    @DeleteMapping(value = "/delOrderByProductId")
+    public String removeOrderByProdId(@RequestParam int id) {
+        try {
+            return orderService.removeOrderByProdId(id);
+        } catch (NoSuchElementException e) {
+            log.info("{}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
+        }
+    }
+
+    @DeleteMapping(value = "/delAllOrders")
+    public String removeAllOrders() {
+        return orderService.removeAllOrders();
+    }
 }

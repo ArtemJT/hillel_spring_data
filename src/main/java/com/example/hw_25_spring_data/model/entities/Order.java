@@ -1,28 +1,27 @@
-package com.example.hw_25_spring_data.entities;
+package com.example.hw_25_spring_data.model.entities;
 
-import com.example.hw_25_spring_data.entities.Product;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(schema = "store_db", name = "receipt")
+@Table(name = "receipt")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -32,6 +31,6 @@ public class Order {
 
     private double cost;
 
-    @OneToMany
-    private Set<Product> products;
+    @OneToMany(cascade = CascadeType.DETACH)
+    private List<Product> products;
 }
