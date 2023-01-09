@@ -1,21 +1,15 @@
 package com.example.hw_25_spring_data.model.service;
 
 import com.example.hw_25_spring_data.dto.OrderDto;
-import com.example.hw_25_spring_data.dto.ProductDto;
 import com.example.hw_25_spring_data.model.entities.Order;
-import com.example.hw_25_spring_data.model.entities.Product;
 import com.example.hw_25_spring_data.model.repo.OrderRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Streams;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
