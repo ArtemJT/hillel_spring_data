@@ -24,7 +24,7 @@ public class OrderController {
         try {
             return orderService.addOrder(id);
         } catch (NoSuchElementException e) {
-            log.info("{}", e.getMessage());
+            log.error("{}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }
@@ -34,7 +34,7 @@ public class OrderController {
         try {
             return orderService.getOrderById(id);
         } catch (NoSuchElementException e) {
-            log.info("{}", e.getMessage());
+            log.error("{}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }
@@ -49,7 +49,7 @@ public class OrderController {
         try {
             return orderService.removeOrder(id);
         } catch (NoSuchElementException e) {
-            log.info("{}", e.getMessage());
+            log.error("{}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }
@@ -59,7 +59,7 @@ public class OrderController {
         try {
             return orderService.removeOrderByProdId(id);
         } catch (NoSuchElementException e) {
-            log.info("{}", e.getMessage());
+            log.error("{}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }

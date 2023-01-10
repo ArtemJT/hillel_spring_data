@@ -39,7 +39,7 @@ public class ProductController {
         try {
             return productService.getProductById(id);
         } catch (NoSuchElementException e) {
-            log.info("{}", e.getMessage());
+            log.error("{}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXC_MSG);
         }
     }

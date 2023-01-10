@@ -4,14 +4,16 @@ import com.example.hw_25_spring_data.dto.ProductDto;
 import com.example.hw_25_spring_data.model.entities.Product;
 import com.example.hw_25_spring_data.model.repo.ProductRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.StringJoiner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -74,12 +76,4 @@ class ProductServiceTest {
         assertThrows(NoSuchElementException.class, () -> productService.getProductById(0));
         assertEquals(productDto, productService.getProductById(1));
     }
-
-//    private void addProductToList() {
-//        index++;
-//        product = new Product();
-//        product.setName("product-" + index);
-//        product.setCost(Double.parseDouble(String.valueOf(index) + index + "." + index + index));
-//        productList.add(product);
-//    }
 }
