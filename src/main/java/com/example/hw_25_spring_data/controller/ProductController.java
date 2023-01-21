@@ -16,26 +16,27 @@ import static com.example.hw_25_spring_data.controller.OrderController.EXC_MSG;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("product")
 public class ProductController {
 
     private final ProductService productService;
 
-    @PutMapping(value = "/addProducts")
-    public String writeProducts(@RequestParam Integer qty) {
-        if (qty == null || qty == 0) {
+    @PostMapping(value = "{quantity}")
+    public String writeProducts(@PathVariable Integer quantity) {
+        if (quantity == null || quantity == 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity must be greater than zero");
         } else {
-            return productService.addProducts(qty);
+            return productService.addProducts(quantity);
         }
     }
 
-    @GetMapping(value = "/getAllProducts")
+    @GetMapping
     public List<ProductDto> readAllProducts() {
         return productService.getAllProducts();
     }
 
-    @GetMapping(value = "/getProduct")
-    public ProductDto readProduct(@RequestParam int id) {
+    @GetMapping(value = "{id}")
+    public ProductDto readProduct(@PathVariable int id) {
         try {
             return productService.getProductById(id);
         } catch (NoSuchElementException e) {
@@ -44,7 +45,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping(value = "/delAllProducts")
+    @DeleteMapping
     public String removeAllProducts() {
         return productService.removeAllProducts();
     }

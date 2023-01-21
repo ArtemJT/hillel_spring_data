@@ -14,12 +14,13 @@ import java.util.NoSuchElementException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("order")
 public class OrderController {
 
     private final OrderService orderService;
     protected static final String EXC_MSG = "ID NOT FOUND";
 
-    @PutMapping(value = "/addOrder")
+    @PostMapping
     public String writeOrder(@RequestParam int... id) {
         try {
             return orderService.addOrder(id);
@@ -29,8 +30,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping(value = "/getOrder")
-    public OrderDto readOrder(@RequestParam int id) {
+    @GetMapping(value = "{id}")
+    public OrderDto readOrder(@PathVariable int id) {
         try {
             return orderService.getOrderById(id);
         } catch (NoSuchElementException e) {
@@ -39,13 +40,13 @@ public class OrderController {
         }
     }
 
-    @GetMapping(value = "/getAllOrders")
+    @GetMapping
     public List<OrderDto> readAllOrders() {
         return orderService.getAllOrders();
     }
 
-    @DeleteMapping(value = "/delOrder")
-    public String removeOrder(@RequestParam int id) {
+    @DeleteMapping(value = "{id}")
+    public String removeOrder(@PathVariable int id) {
         try {
             return orderService.removeOrder(id);
         } catch (NoSuchElementException e) {
@@ -54,8 +55,8 @@ public class OrderController {
         }
     }
 
-    @DeleteMapping(value = "/delOrderByProductId")
-    public String removeOrderByProdId(@RequestParam int id) {
+    @DeleteMapping(value = "/product/{id}")
+    public String removeOrderByProdId(@PathVariable int id) {
         try {
             return orderService.removeOrderByProdId(id);
         } catch (NoSuchElementException e) {
@@ -64,7 +65,7 @@ public class OrderController {
         }
     }
 
-    @DeleteMapping(value = "/delAllOrders")
+    @DeleteMapping
     public String removeAllOrders() {
         return orderService.removeAllOrders();
     }
